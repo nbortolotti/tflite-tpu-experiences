@@ -2,7 +2,7 @@ import numpy as np
 import tflite_runtime.interpreter as tflite
 
 
-interpreter = tflite.Interpreter(model_path="converted_model.tflite")
+interpreter = tflite.Interpreter(model_path="converted_model.tflite") # change the tflite model
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
