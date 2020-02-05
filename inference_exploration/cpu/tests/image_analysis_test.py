@@ -3,8 +3,8 @@ import PIL.Image as Image
 import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
-from inference_exploration.cpu import main
 
+from main import image_analysis
 
 def test_image():
     classifier_url = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4"
@@ -18,5 +18,5 @@ def test_image():
 
     img_array = np.array(img) / 255.0
 
-    predicted_class = main.image_analysis(classifier, image_shape, img_array)
+    predicted_class = image_analysis(classifier, image_shape, img_array)
     assert predicted_class == 209
