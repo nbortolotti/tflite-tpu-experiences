@@ -107,3 +107,12 @@ venv.bak/
 .idea/
 # vscode folder config
 .vscode/
+
+# models
+*.tflite
+
+# images
+*.jpg
+
+# text files
+*.txt
