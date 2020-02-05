@@ -1,4 +1,4 @@
-name: Python application
+name: Python app inference exploration
 
 on: [push]
 
@@ -30,3 +30,4 @@ jobs:
       run: |
         pip install pytest
         pytest
+        working-directory: inference_exploration/cpu/
