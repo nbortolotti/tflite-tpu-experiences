@@ -7,12 +7,14 @@ import tensorflow as tf
 import tensorflow_hub as hub
 from tensorflow.keras import layers
 
+
 def image_analysis(classifier, image_shape, img_array):
     result = classifier.predict(img_array[np.newaxis, ...])
     # result.shape
 
     predicted_class = np.argmax(result[0], axis=-1)
     return predicted_class
+
 
 def main():
     classifier_url = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4"

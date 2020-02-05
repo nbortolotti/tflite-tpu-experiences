@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
 
-from main import image_analysis
+from inference_exploration.cpu.main_cpu import image_analysis
 
 def test_image():
     classifier_url = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/4"
