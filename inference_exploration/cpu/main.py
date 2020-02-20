@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import PIL.Image as Image
 import matplotlib.pylab as plt
@@ -6,6 +7,8 @@ import time
 import tensorflow as tf
 import tensorflow_hub as hub
 from tensorflow.keras import layers
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def image_analysis(classifier, image_shape, img_array):
@@ -34,22 +37,22 @@ def main():
     labels_path = tf.keras.utils.get_file('ImageNetLabels.txt',
                                           'https://storage.googleapis.com/download.tensorflow.org/data/ImageNetLabels.txt')
     imagenet_labels = np.array(open(labels_path).read().splitlines())
-
-    plt.imshow(img_array)
-    plt.axis('off')
-    predicted_class_name = imagenet_labels[predicted_class]
-    _ = plt.title("Prediction: " + predicted_class_name.title())
-    plt.show()
-
-    # inferenceTime(img_array, classifier)
+    #
+    # plt.imshow(img_array)
+    # plt.axis('off')
+    # predicted_class_name = imagenet_labels[predicted_class]
+    # _ = plt.title("Prediction: " + predicted_class_name.title())
+    # plt.show()
+    for _ in range(5):
+        inferenceTime(img_array, classifier)
 
 
 # explore time to do the inference
 def inferenceTime(image, mClassifier):
-    start = time.time()
+    start =  time.time()
     result = mClassifier.predict(image[np.newaxis, ...])
     end = time.time()
-    print(end - start)
+    print((end - start)*1000) #milliseconds
 
     # predicted_class = np.argmax(result[0], axis=-1)
     # predicted_class_name = mLabels[predicted_class]
