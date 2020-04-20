@@ -6,61 +6,62 @@ from PIL import Image
 
 import tflite_runtime.interpreter as tflite
 
-
 EDGETPU_SHARED_LIB = 'libedgetpu.so.1'
+
 
 def load_labels(path, encoding='utf-8'):
     with open(path, 'r', encoding=encoding) as f:
         lines = f.readlines()
         if not lines:
-          return {}
+            return {}
 
         if lines[0].split(' ', maxsplit=1)[0].isdigit():
-          pairs = [line.split(' ', maxsplit=1) for line in lines]
-          return {int(index): label.strip() for index, label in pairs}
+            pairs = [line.split(' ', maxsplit=1) for line in lines]
+            return {int(index): label.strip() for index, label in pairs}
         else:
-          return {index: line.strip() for index, line in enumerate(lines)}
+            return {index: line.strip() for index, line in enumerate(lines)}
 
 
 def make_interpreter(model_file):
-  model_file, *device = model_file.split('@')
-  return tflite.Interpreter(
-      model_path=model_file,
-      experimental_delegates=[
-          tflite.load_delegate(EDGETPU_SHARED_LIB,
-                               {'device': device[0]} if device else {})
-      ])
+    model_file, *device = model_file.split('@')
+    return tflite.Interpreter(
+        model_path=model_file,
+        experimental_delegates=[
+            tflite.load_delegate(EDGETPU_SHARED_LIB,
+                                 {'device': device[0]} if device else {})
+        ])
+
 
 def input_size():
-  #using a 224 picture size
-  return 224, 224
+    # using a 224 picture size
+    return 224, 224
 
 
 def input_tensor(interpreter):
-  tensor_index = interpreter.get_input_details()[0]['index']
-  return interpreter.tensor(tensor_index)()[0]
+    tensor_index = interpreter.get_input_details()[0]['index']
+    return interpreter.tensor(tensor_index)()[0]
 
 
 def output_tensor(interpreter):
-  output_details = interpreter.get_output_details()[0]
-  output_data = np.squeeze(interpreter.tensor(output_details['index'])())
-  scale, zero_point = output_details['quantization']
-  return scale * (output_data - zero_point)
+    output_details = interpreter.get_output_details()[0]
+    output_data = np.squeeze(interpreter.tensor(output_details['index'])())
+    scale, zero_point = output_details['quantization']
+    return scale * (output_data - zero_point)
 
 
 def set_input(interpreter, data):
-  input_tensor(interpreter)[:, :] = data
+    input_tensor(interpreter)[:, :] = data
 
 
 def get_output(interpreter, top_k=1, score_threshold=0.0):
-  Class = collections.namedtuple('Class', ['id', 'score'])
-  scores = output_tensor(interpreter)
-  classes = [
-      Class(i, scores[i])
-      for i in np.argpartition(scores, -top_k)[-top_k:]
-      if scores[i] >= score_threshold
-  ]
-  return sorted(classes, key=operator.itemgetter(1), reverse=True)
+    Class = collections.namedtuple('Class', ['id', 'score'])
+    scores = output_tensor(interpreter)
+    classes = [
+        Class(i, scores[i])
+        for i in np.argpartition(scores, -top_k)[-top_k:]
+        if scores[i] >= score_threshold
+    ]
+    return sorted(classes, key=operator.itemgetter(1), reverse=True)
 
 
 def main():
@@ -87,4 +88,4 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+    main()
