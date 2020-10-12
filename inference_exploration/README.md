@@ -1,3 +1,4 @@
+![Python app inference exploration](https://github.com/nbortolotti/tflite-tpu-experiences/workflows/Python%20app%20inference%20exploration/badge.svg?branch=master)
 # Inference exploration
 ## tflite
 *example executed using a Coral edge tpu accelerator*
