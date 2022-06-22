@@ -1,4 +1,4 @@
 # pip install -r requirements.txt
 # tflite_runtime
-numpy==1.16.4
+numpy==1.22.0
 Pillow>=8.3.2
